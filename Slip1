@@ -1,0 +1,39 @@
+class Singleton { 
+    // volatile ensures visibility of changes across threads 
+    private static volatile Singleton instance; 
+ 
+    // private constructor 
+    private Singleton() {} 
+ 
+    // method to get single instance 
+    public static Singleton getInstance() { 
+        if (instance == null) { 
+            synchronized(Singleton.class) { // thread-safe 
+                if (instance == null) { 
+                    instance = new Singleton(); 
+                } 
+            } 
+        } 
+        return instance; 
+    } 
+ 
+    public void showMessage() { 
+        System.out.println("Singleton instance is working!"); 
+    } 
+} 
+ 
+// Main class to test 
+public class hello { 
+    public static void main(String[] args) { 
+        // Create multiple threads trying to get Singleton instance 
+        Runnable task = () -> { 
+            Singleton obj = Singleton.getInstance(); 
+            obj.showMessage(); 
+        }; 
+ 
+        Thread t1 = new Thread(task); 
+        Thread t2 = new Thread(task); 
+        t1.start(); 
+        t2.start(); 
+    } 
+} 
